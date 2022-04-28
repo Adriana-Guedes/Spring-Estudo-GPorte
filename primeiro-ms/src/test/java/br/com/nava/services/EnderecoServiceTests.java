@@ -44,28 +44,25 @@ import br.com.nava.repositories.EnderecoRepository;
 		
 		@Test
 		void getAllTest() {
-			
-			// vamos criar uma lista de entidade de endereco com o objeto
-			// de retornar a mesma quando o enderecoRepository.findAll() 
-			// for acionado
-			
+			//VAMOS CRIAR UMA LISTA DE ENTIDADE DE ENDEREÇO COM O OBJETO
+			//DE RETORNAR A MEMA QUANDO O ENDERECOREPOSITORY.FINDALL() FOR ACIONADO
+						
 			List<EnderecoEntity> listaMockada = new ArrayList<EnderecoEntity>();
 	
 			EnderecoEntity enderecoEntidade = createValidEndereco();
 			
 			listaMockada.add(enderecoEntidade);
-			
-			// quando o repository for acionado, retorno a lista Mockada
+			//QUANDO O REPOSITORY FOR ACIONADO, RETORNO A LISTA MOCKADA
 			when( enderecoRepository.findAll() ).thenReturn( listaMockada );
 			
 			List<EnderecoDTO> retorno = enderecoService.getAll();
 ;				
-			// validar a resposta
+			// VALIDAR RESPOSTA
 			isEnderecoValid(retorno.get(0), listaMockada.get(0));
 					
 		}
 		
-		// quando o objeto é achado no banco de dados
+		//QUANDO O OBJETO É ACHADO NO BANCO DE DADOS
 		@Test
 		void getOneWhenFoundObjectTest() {
 			
@@ -75,10 +72,10 @@ import br.com.nava.repositories.EnderecoRepository;
 			
 			when ( enderecoRepository.findById(1) ).thenReturn( optional );
 			
-			// execução
+			// EXECUÇÃO
 			EnderecoDTO obj = enderecoService.getOne(1);
 			
-			//validação
+			//VALIDAÇÃO
 			
 //			assertThat( obj.getCep() ).isEqualTo( professorEntidade.getCep() );
 //			assertThat( obj.getNome() ).isEqualTo( professorEntidade.getNome() );
@@ -86,34 +83,34 @@ import br.com.nava.repositories.EnderecoRepository;
 //			assertThat( obj.getRua() ).isEqualTo( professorEntidade.getRua() );
 //			assertThat( obj.getId() ).isEqualTo( professorEntidade.getId() );
 			
-			// validar a resposta
+			// VALIDAR A RESPOSTA
 			isEnderecoValid(obj, professorEntidade);
 		}
 		
-		// quando o objeto NÃO é  achado no banco de dados
+		//QUANDO O OBJETO NÃO É ACHADO NO BANCO DE DADOS
 		@Test
 		void getOneWhenNotFoundObjectTest() {
 			
-			// Optional.empty() -> simulando o caso de NÃO achar o registro no banco de dados
+			// Optional.empty() -> SIMULANDO O CASO DE NÃO ACHAR O REGISTRO NO BANDO DE DADOS 
 			Optional<EnderecoEntity> optional = Optional.empty();
 			
 			when ( enderecoRepository.findById(1) ).thenReturn( optional );
 			
-			// execução
+			// EXECUÇÃO
 			EnderecoDTO obj = enderecoService.getOne(1);
 			
-			// objeto com valores "padrão"
+			// OBJETO COM VALORES "PADRÃO"
 			EnderecoEntity enderecoEntidade = new EnderecoEntity();
 			
-			//validação
+			//VALIDAÇÃO
 			
-//			assertThat( obj.getCep() ).isEqualTo( professorEntidade.getCep() );
-//			assertThat( obj.getNome() ).isEqualTo( professorEntidade.getNome() );
-//			assertThat( obj.getNumero() ).isEqualTo( professorEntidade.getNumero() );
-//			assertThat( obj.getRua() ).isEqualTo( professorEntidade.getRua() );
-//			assertThat( obj.getId() ).isEqualTo( professorEntidade.getId() );
+//			ASSERTTHAT( OBJ.GETCEP() ).ISEQUALTO( PROFESSORENTIDADE.GETCEP() );
+//			ASSERTTHAT( OBJ.GETNOME() ).ISEQUALTO( PROFESSORENTIDADE.GETNOME() );
+//			ASSERTTHAT( OBJ.GETNUMERO() ).ISEQUALTO( PROFESSORENTIDADE.GETNUMERO() );
+//			ASSERTTHAT( OBJ.GETRUA() ).ISEQUALTO( PROFESSORENTIDADE.GETRUA() );
+//			ASSERTTHAT( OBJ.GETID() ).ISEQUALTO( PROFESSORENTIDADE.GETID() );
 			
-			// validar a resposta
+			// VALIDAR A RESPOSTA
 			isEnderecoValid(obj, enderecoEntidade);
 		}
 		
@@ -179,12 +176,12 @@ import br.com.nava.repositories.EnderecoRepository;
 		@Test
 		void deleteTest() {
 			
-			// execução
-			// assertDoesNotThrow espera uma lambda (método sem nome) e verifica se a lambda executa sem erro
-			assertDoesNotThrow( () -> enderecoService.delete(1) );
+			// EXECUÇÃO
+			// assertDoesNotThrow ESPERA UMA LAMBDA  (METODO SEM NOME) E VERIFICAR SE A LAMBIDA EXECUTA SEM ERRO
+			assertDoesNotThrow( () -> enderecoService.delete(10) );
 			
-			// verifico se o professorRepository.deleteById foi executado somente uma vez 
-			verify( enderecoRepository, times(1) ).deleteById(2);
+			// VERIFICA SE O professorRepository.deleteById FOI EXECUTADO SOMENTE UMA VEZ 
+			verify( enderecoRepository, times(1) ).deleteById(10);
 		}
 		
 		
@@ -194,7 +191,7 @@ import br.com.nava.repositories.EnderecoRepository;
 		//METODO DE VALIDAÇÃO DE OBJETO, SE O FOI CRIADO
 		private void isEnderecoValid( EnderecoDTO obj, EnderecoEntity enderecoEntidade ) {
 			
-			assertThat( obj.getId() ).isNotNull();
+			assertThat( obj.getId() ).isEqualTo( enderecoEntidade.getId() );
 			assertThat( obj.getRua() ).isEqualTo( enderecoEntidade.getRua() );
 			assertThat( obj.getNumero() ).isEqualTo( enderecoEntidade.getNumero() );
 			assertThat( obj.getCep() ).isEqualTo( enderecoEntidade.getCep() );
@@ -216,7 +213,7 @@ import br.com.nava.repositories.EnderecoRepository;
 			enderecoEntidade.setNumero(44);
 			enderecoEntidade.setCep("0360230000");
 			enderecoEntidade.setCidade("São Paulo");
-			enderecoEntidade.setId(1);
+			enderecoEntidade.setId(10);
 			// RETORNANDO ESTE NOVO OBJETO CRIADO
 			return enderecoEntidade;
 		}

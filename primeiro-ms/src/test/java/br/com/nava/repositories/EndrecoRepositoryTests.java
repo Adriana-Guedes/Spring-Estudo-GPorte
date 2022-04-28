@@ -20,7 +20,7 @@ import br.com.nava.entities.EnderecoEntity;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-public class EndrecoRepositoryTests {
+   class EndrecoRepositoryTests {
 
 
 
@@ -32,7 +32,7 @@ public class EndrecoRepositoryTests {
 	private TestEntityManager testEntityManager;
 	
 	@Test
-	void findByIdWhenFoundTest() {
+	 void findByIdWhenFoundTest() {
 		
 		EnderecoEntity enderecoEntidade = createValidEndereco();
 		

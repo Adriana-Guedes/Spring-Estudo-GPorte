@@ -19,11 +19,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.nava.dtos.VendaDTO;
+import br.com.nava.entities.VendaEntity;
+import br.com.nava.services.VendaService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc  //PÁRA DEIXAR AS CONFGIRUAÇÕES PADROES
-public class VendaControllerTests {
+ public class VendaControllerTests {
 
 	
 	ObjectMapper mapper = new ObjectMapper(); // CONVERSOR DE STRING PARA ARRAY
@@ -32,6 +34,8 @@ public class VendaControllerTests {
 	 @Autowired
 	 private MockMvc mockMvc; // INSTANCIAR O MOCKMVC PARA SIMULARAÇÕES
 	 
+	 @Autowired
+	 private VendaService vendaService;
 	 
 	 @Test
 	 void getAllTest() throws Exception {
@@ -151,16 +155,30 @@ public class VendaControllerTests {
 	 @Test
 		void deleteTest() throws Exception {
 
-			// para enviar a requisição
+		 
+		 VendaEntity obj = this.createValidVenda();
+		 VendaDTO dto = this.vendaService.save(obj);
+		 
+			// PARA ENVIAR A REQUISIÇÃO 
 			ResultActions response = mockMvc.perform(
-					delete("/vendas/1")
+					delete("/vendas/" + dto.getId())
 					.contentType("application/json"));
-			// pegando o resultado via mvcResult
+			// PEGANDO O RESULTADO VIA mvcResult
 			MvcResult result = response.andReturn();		
 			assertThat(result.getResponse().getStatus()).isEqualTo(200);
 		}
+	 
+	 
+	 private VendaEntity createValidVenda() {
+		 
+		 VendaEntity vendaEntity = new VendaEntity();
+		
+		 vendaEntity.setValorTotal(Float.valueOf(20));	
+		 
+		 return vendaEntity;
+	 }
 
-	}
+}
 
 
 

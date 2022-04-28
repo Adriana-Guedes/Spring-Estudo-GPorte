@@ -20,19 +20,24 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.nava.dtos.UsuarioDTO;
+import br.com.nava.entities.UsuarioEntity;
+import br.com.nava.services.UsuarioService;
 
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc  //PÁRA DEIXAR AS CONFGIRUAÇÕES PADROES
-public class UsuarioControllerTests {
+ public class UsuarioControllerTests {
 
 	
 	ObjectMapper mapper = new ObjectMapper(); // CONVERSOR DE STRING PARA ARRAY
 	
-	
+ 
 	 @Autowired
 	 private MockMvc mockMvc; // INSTANCIAR O MOCKMVC PARA SIMULARAÇÕES
+	 
+	 @Autowired
+	 private UsuarioService usuarioService;
 	 
 	 
 	 @Test
@@ -59,7 +64,7 @@ public class UsuarioControllerTests {
 		 
 		// ARMAZENA O OBJETO QUE FARA O TEST COLHER O RESULTADO
 			ResultActions response = mockMvc.perform(
-												get("/usuarios/1") //NECESSÁRIO INFORMAR O ID ESPECIFICO QUE VC DESEJA TRAZER 
+												get("/usuarios/7") //NECESSÁRIO INFORMAR O ID ESPECIFICO QUE VC DESEJA TRAZER 
 												.contentType("application/json")
 											);
 			// PEGANDO O RESULTADO 
@@ -74,7 +79,7 @@ public class UsuarioControllerTests {
 			UsuarioDTO usuario = mapper.readValue(responseStr, UsuarioDTO.class);
 			
 			// VERFICANDO SE A LISTA DE RETORNO NÃO É VAZIA
-			assertThat(usuario.getId() ).isEqualTo(1) ;  // OU O ID 
+			assertThat(usuario.getId() ).isEqualTo(7) ;  // OU O ID 
 			assertThat(result.getResponse().getStatus()).isEqualTo(200); //OU O STATUS DA REQUISIÇÃO
 		}
 	 
@@ -129,7 +134,7 @@ public class UsuarioControllerTests {
 			
 			// PARA ENVIAR A REQUISIÇÃO 
 					ResultActions response = mockMvc.perform(
-					patch("/usuarios/1")
+					patch("/usuarios/7")
 					.content( mapper.writeValueAsString(usuario) )
 					.contentType("application/json")
 				);
@@ -154,15 +159,33 @@ public class UsuarioControllerTests {
 	 
 	 @Test
 		void deleteTest() throws Exception {
+		 
+		 
+		 UsuarioEntity obj = this.createValidUsuario();
+		 UsuarioDTO dto = this.usuarioService.save(obj);
 
-			// para enviar a requisição
+		 	// PARA ENVIAR A REQUISIÇÃO
 			ResultActions response = mockMvc.perform(
-					delete("/usuarios/2")
-					.contentType("application/json"));
-			// pegando o resultado via mvcResult
+					delete("/usuarios/12")
+					.contentType("application/" + dto.getId()));
+			// PEGANDO O RESULTADO VIA  mvcResult
 			MvcResult result = response.andReturn();		
 			assertThat(result.getResponse().getStatus()).isEqualTo(200);
 		}
+	 
+	 
+	 //METODO CRIAÇÃO DE OBJETO
+	 private UsuarioEntity createValidUsuario() {
+		 
+		// INSTANCIANDO O NOVO OBJETO DO TIPO ProfessorEntity 
+		 UsuarioEntity usuarioEntidade = new UsuarioEntity();
+		 
+		 usuarioEntidade.setNome("Amanda");
+		 usuarioEntidade.setEmail("amanda@rmail.com");
+		 
+		// RETORNANDO ESTE NOVO OBJETO CRIADO
+		 return usuarioEntidade;
+	 }
 
 	}
 

@@ -22,19 +22,24 @@ package br.com.nava.controllers;
 	import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nava.dtos.EnderecoDTO;
+import br.com.nava.entities.EnderecoEntity;
+import br.com.nava.services.EnderecoService;
 
 		
 		
 				@ExtendWith(SpringExtension.class)
 				@SpringBootTest
-				@AutoConfigureMockMvc  //PÁRA DEIXAR AS CONFGIRUAÇÕES PADROES
-				public class EnderecoControllerTests {
+				@AutoConfigureMockMvc    //PÁRA DEIXAR AS CONFGIRUAÇÕES PADROES
+				 public class EnderecoControllerTests {
 					
 					ObjectMapper mapper = new ObjectMapper(); // CONVERSOR DE STRING PARA ARRAY
 					
-					
+				
 				 @Autowired
 				 private MockMvc mockMvc; // INSTANCIAR O MOCKMVC PARA SIMULARAÇÕES
+				 
+				 @Autowired
+				 private EnderecoService enderecoService;
 				 
 				 
 				 @Test
@@ -170,16 +175,35 @@ import br.com.nava.dtos.EnderecoDTO;
 				 
 				 @Test
 					void deleteTest() throws Exception {
+					 
+					 	EnderecoEntity obj = this.createValidEndereco();		
+						EnderecoDTO dto = this.enderecoService.save(obj);
 
 						// PARA ENVIAR A REQUISIÇÃO
 						ResultActions response = mockMvc.perform(
-								delete("/enderecos/8")
+								delete("/enderecos/" + dto.getId())
 								.contentType("application/json"));
 						// PEGANDO O RESULTADO VIA  mvcResult
 						MvcResult result = response.andReturn();		
 						assertThat(result.getResponse().getStatus()).isEqualTo(200);
 					}
 
+				 //METODO CRIAÇÃO E OBJETO 
+				 private EnderecoEntity createValidEndereco() {
+					 
+					// INSTANCIANDO O NOVO OBJETO DO TIPO ProfessorEntity 
+					 EnderecoEntity enderecoEntidade = new EnderecoEntity();
+					 
+					 enderecoEntidade.setRua("Avenida do Teste 5");
+					 enderecoEntidade.setNumero(44);
+					 enderecoEntidade.setCep("0360230000");
+					 enderecoEntidade.setCidade("São Paulo");
+					 enderecoEntidade.setEstado("SP");
+					 
+					// RETORNANDO ESTE NOVO OBJETO CRIADO
+					 return enderecoEntidade;
+				 }
+				 
 				}
 	
 

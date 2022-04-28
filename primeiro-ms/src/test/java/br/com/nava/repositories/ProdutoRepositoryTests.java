@@ -17,7 +17,7 @@ import br.com.nava.entities.ProdutoEntity;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-public class ProdutoRepositoryTests {
+ class ProdutoRepositoryTests {
 	
 	
 	
@@ -82,7 +82,7 @@ public class ProdutoRepositoryTests {
 		ProdutoEntity produtoSalvo = produtoRepository.save(produtoEntidade);
 		
 		//VALIDAÇÃO
-		assertThat( produtoSalvo.getId() ).isNotNull();
+		assertThat( produtoSalvo.getId() ).isEqualTo( produtoEntidade.getId() );
 		assertThat( produtoSalvo.getNome() ).isEqualTo( produtoEntidade.getNome() );
 		assertThat( produtoSalvo.getDescricao() ).isEqualTo( produtoEntidade.getDescricao() );
 		assertThat( produtoSalvo.getPreco() ).isEqualTo( produtoEntidade.getPreco() );

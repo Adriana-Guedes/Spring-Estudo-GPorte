@@ -18,7 +18,7 @@ import br.com.nava.entities.VendaEntity;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-public class VendaRepositoryTests {
+ class VendaRepositoryTests {
 	
 	
 
@@ -84,7 +84,7 @@ public class VendaRepositoryTests {
 		VendaEntity vendaSalvo = vendaRepository.save(vendaEntidade);
 		
 		//VALIDAÇÃO
-		assertThat( vendaSalvo.getId() ).isNotNull();
+		assertThat( vendaSalvo.getId() ).isEqualTo( vendaSalvo.getId() );
 		assertThat( vendaSalvo.getValorTotal()).isEqualTo( vendaSalvo.getValorTotal() );
 		
 		

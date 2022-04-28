@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.nava.dtos.ProdutoDTO;
+import br.com.nava.entities.ProdutoEntity;
+import br.com.nava.services.ProdutoService;
 
 
 
@@ -28,13 +30,16 @@ import br.com.nava.dtos.ProdutoDTO;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProdutoControllerTests {
+ public class ProdutoControllerTests {
 	
 	ObjectMapper mapper = new ObjectMapper(); // CONVERSOR DE STRING PARA ARRAY
 	
 	
 	 @Autowired
 	 private MockMvc mockMvc; // INSTANCIAR O MOCKMVC PARA SIMULARAÇÕES
+	 
+	 @Autowired
+	 private ProdutoService produtoSerive;
 	 
 	 
 	 @Test
@@ -61,7 +66,7 @@ public class ProdutoControllerTests {
 		 
 		// ARMAZENA O OBJETO QUE FARA O TEST COLHER O RESULTADO
 			ResultActions response = mockMvc.perform(
-												get("/produtos/1") //NECESSÁRIO INFORMAR O ID ESPECIFICO QUE VC DESEJA TRAZER 
+												get("/produtos/7") //NECESSÁRIO INFORMAR O ID ESPECIFICO QUE VC DESEJA TRAZER 
 												.contentType("application/json")
 											);
 			// PEGANDO O RESULTADO 
@@ -76,7 +81,7 @@ public class ProdutoControllerTests {
 			ProdutoDTO produto = mapper.readValue(responseStr, ProdutoDTO.class);
 			
 			// VERFICANDO SE A LISTA DE RETORNO NÃO É VAZIA
-			assertThat(produto.getId() ).isEqualTo(1) ;  // OU O ID 
+			assertThat(produto.getId() ).isEqualTo(7) ;  // OU O ID 
 			assertThat(result.getResponse().getStatus()).isEqualTo(200); //OU O STATUS DA REQUISIÇÃO
 		}
 	 
@@ -134,7 +139,7 @@ public class ProdutoControllerTests {
 			
 			// PARA ENVIAR A REQUISIÇÃO 
 					ResultActions response = mockMvc.perform(
-					patch("/produtos/1")
+					patch("/produtos/7" )
 					.content( mapper.writeValueAsString(produto) )
 					.contentType("application/json")
 				);
@@ -153,22 +158,41 @@ public class ProdutoControllerTests {
 			assertThat( produtoSalvo.getNome()).isEqualTo( produto.getNome() );
 			assertThat( produtoSalvo.getDescricao()).isEqualTo( produto.getDescricao() );
 			assertThat(produtoSalvo.getPreco()).isEqualTo(produto.getPreco());
-		
+		 
 			assertThat( result.getResponse().getStatus() ).isEqualTo( 200 );
 		}
 		
 	 
 	 @Test
 		void deleteTest() throws Exception {
-
-			// para enviar a requisição
+		 
+		 	ProdutoEntity obj = this.createValidProduto();		
+		 	ProdutoDTO dto = this.produtoSerive.save(obj);
+		 	
+			// PARA ENVIAR A REQUISIÇÃO
 			ResultActions response = mockMvc.perform(
-					delete("/produtos/1")
-					.contentType("application/json"));
-			// pegando o resultado via mvcResult
+					delete("/produtos/" + dto.getId())
+					.contentType("application/json")
+					);
+			// PEGANDO O RESULTADO VIA mvcResult
 			MvcResult result = response.andReturn();		
 			assertThat(result.getResponse().getStatus()).isEqualTo(200);
 		}
 
+	 //METODO CRIAÇÃO E OBJETO 
+	 	private ProdutoEntity createValidProduto() {
+	 		
+	 	// INSTANCIANDO O NOVO OBJETO DO TIPO ProfessorEntity
+		ProdutoEntity produtoEntidade = new ProdutoEntity();
+	
+		produtoEntidade.setNome("Feijao");
+		produtoEntidade.setDescricao("Feijão Preto");
+		produtoEntidade.setPreco(30);
+		
+		// RETORNANDO ESTE NOVO OBJETO CRIADO
+		return produtoEntidade;
+		
+			 
 	}
 
+}

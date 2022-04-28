@@ -40,10 +40,7 @@ public class ProfessorServiceTests {
 	
 	@Test
 	void getAllTest() {
-		
-		// vamos criar uma lista de entidade de professor com o objeto
-		// de retornar a mesma quando o professorRepository.findAll() 
-		// for acionado
+	
 		
 		List<ProfessorEntity> listaMockada = new ArrayList<ProfessorEntity>();
 		
@@ -129,16 +126,16 @@ public class ProfessorServiceTests {
 	@Test
 	void saveTest() {
 		
-		// 1-) Cenário
-		//objeto com dados válidos de um professor
+		// 1-) CENÁRIO
+		//OBJETO COM DADOS VÁLIDOS DE UM PROFESSOR
 		ProfessorEntity professorEntidade = createValidProfessor();
 		
-		// quando o professorRepository.save for acionado, retornaremos um objeto de professor com dados válidos
+		// QUANDO O PROFESSORREPOSITORY.SAVE FOR ACIONADO, RETORNAREMOS UM OBJETO DE PROFESSOR COM DADOS VÁLIDOS
 		when( professorRepository.save(professorEntidade) ).thenReturn(professorEntidade);
 		
 		ProfessorDTO professorSalvo = professorService.save(professorEntidade);
 		
-		// validar a resposta
+		// VALIDAR A RESPOSTA
 		isProfessorValid(professorSalvo, professorEntidade);
 		
 	}
@@ -146,8 +143,8 @@ public class ProfessorServiceTests {
 	@Test
 	void updateWhenFoundObj() {
 		
-		//Cenário
 		
+		//CENÁRIO
 		ProfessorEntity professorEntidade = createValidProfessor();
 		Optional<ProfessorEntity> optional = Optional.of(professorEntidade);
 		
@@ -155,19 +152,19 @@ public class ProfessorServiceTests {
 		when (professorRepository.findById( professorEntidade.getId() ) ).thenReturn(optional);
 		when ( professorRepository.save(professorEntidade) ).thenReturn(professorEntidade);
 		
-		// execução
+		// EXECUÇÃO
 		ProfessorDTO professorAlterado = professorService.
 					update(professorEntidade.getId(), professorEntidade);
 		
-		// validar a resposta
+		// VALIDAR A RESPOSTA
 		isProfessorValid(professorAlterado, professorEntidade);
 	}
 	
 	@Test
 	void updateWhenNotFoundObj() {
 				
-		// Cenário
-		// Optional.empty() por conta que não achou o objeto a ser alterado
+		// CENÁRIO
+		// OPTIONAL.EMPTY() POR CONTA QUE NÃO ACHOU O OBJETO A SER ALTERADO
 		Optional<ProfessorEntity> optional = Optional.empty();
 		
 		ProfessorEntity professorEntidade = createValidProfessor();
@@ -175,25 +172,25 @@ public class ProfessorServiceTests {
 		// mocks
 		when ( professorRepository.findById(1) ).thenReturn(optional);
 		
-		// execução
-		// estamos passando como argumento o professorEntidade pois 
-		// em suposição ele não estará no banco de dadaos neste cenário
+		// EXECUÇÃO
+		// ESTAMOS PASSANDO COMO ARGUMENTO O PROFESSORENTIDADE POIS 
+		// EM SUPOSIÇÃO ELE NÃO ESTARÁ NO BANCO DE DADAOS NESTE CENÁRIO
 		ProfessorDTO professorAlterado = professorService.
 							update(1, professorEntidade );
 		
-		// validar a resposta
+		// VALIDAR A RESPOSTA
 		isProfessorValid(professorAlterado, new ProfessorEntity() );
 	}
 	
 	@Test
 	void deleteTest() {
 		
-		// execução
-		// assertDoesNotThrow espera uma lambda (método sem nome) e verifica se a lambda executa sem erro
-		assertDoesNotThrow( () -> professorService.delete(1) );
+		// EXECUÇÃO
+		// assertDoesNotThrow ESPERA UMA LAMBDA (MÉTODO SEM NOME) E VERFICA SE A LAMBDA EXECUTA SEM ERRO
+		assertDoesNotThrow( () -> professorService.delete(10) );
 		
-		// verifico se o professorRepository.deleteById foi executado somente uma vez 
-		verify( professorRepository, times(1) ).deleteById(2);
+		// VERIFICA SE O professorRepository.deleteById FOI EXECUTADO SOMENTE UMA VEZ 
+		verify( professorRepository, times(1) ).deleteById(10);
 	}
 	
 	private void isProfessorValid( ProfessorDTO obj, ProfessorEntity professorEntidade ) {
@@ -207,17 +204,17 @@ public class ProfessorServiceTests {
 	
 	private ProfessorEntity createValidProfessor() {
 		
-		// instanciando o novo objeto do tipo ProfessorEntity
+		// INSTANCIANDO O NOVO OBJETO DO TIPO ProfessorEntity
 		ProfessorEntity professorEntidade = new ProfessorEntity();
 		
-		// colocando valores nos atributos de ProfessorEntity
+		// COLOCANDO VALORES NOS ATRIBUTOS DE ProfessorEntity
 		professorEntidade.setCep("04567895");
 		professorEntidade.setNome("Professor Teste");
 		professorEntidade.setNumero(3);
 		professorEntidade.setRua("Rua de Teste");
-		professorEntidade.setId(1);
 		
-		// retornando este novo objeto criado
+		
+		// RETORNANDO ESTE NOVO OBJETO CRIADO
 		return professorEntidade;
 	}
 	

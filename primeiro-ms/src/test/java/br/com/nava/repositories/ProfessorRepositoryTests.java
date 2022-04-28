@@ -19,7 +19,7 @@ import br.com.nava.entities.ProfessorEntity;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-public class ProfessorRepositoryTests {
+ class ProfessorRepositoryTests {
 
 	@Autowired
 	private ProfessorRepository professorRepository;
@@ -82,7 +82,7 @@ public class ProfessorRepositoryTests {
 		ProfessorEntity professorSalvo = professorRepository.save(professorEntidade);
 		
 		//validação
-		assertThat( professorSalvo.getId() ).isNotNull();
+		assertThat( professorSalvo.getId() ).isEqualTo( professorEntidade.getId() );
 		assertThat( professorSalvo.getCep() ).isEqualTo( professorEntidade.getCep() );
 		assertThat( professorSalvo.getNome() ).isEqualTo( professorEntidade.getNome() );
 		assertThat( professorSalvo.getNumero() ).isEqualTo( professorEntidade.getNumero() );

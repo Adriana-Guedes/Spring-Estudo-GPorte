@@ -16,7 +16,7 @@ import br.com.nava.entities.UsuarioEntity;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-public class UsuarioRepositoryTests {
+ class UsuarioRepositoryTests {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -80,7 +80,7 @@ public class UsuarioRepositoryTests {
 		
 		//VALIDAÇÃO
 		
-		assertThat( usuarioSalvo.getId() ).isNotNull();
+		assertThat( usuarioSalvo.getId() ).isEqualTo( usuarioEntidade.getId() );
 		assertThat( usuarioSalvo.getNome() ).isEqualTo( usuarioEntidade.getNome() );
 		assertThat( usuarioSalvo.getEmail() ).isEqualTo( usuarioEntidade.getEmail() );
 		

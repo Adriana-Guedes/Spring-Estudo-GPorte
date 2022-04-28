@@ -18,35 +18,14 @@ public class ProfessorService {
 	@Autowired
 	private ProfessorRepository professorRepository;
 
-	public void mostrar() {
-		System.out.println("mostrar");
-	}
-	
+		
 	public List<ProfessorDTO> getAll(){
 		List<ProfessorEntity> lista = professorRepository.findAll();
 		
 		List<ProfessorDTO> listaDTO = new ArrayList<>();
-		
-		/*
-		 * for (int i = 0; i < lista.size(); i++) {
-			ProfessorEntity professorEntity = lista.get(i);
-		}*/		
-		
-		//Foreach
-		//1- Tipo da variável de cada elemento da lista, 
-		//2- nome local da variavel e 
-		//3- lista dos elementos a ser percorrido
+
 		for (ProfessorEntity professorEntity : lista) {
-//			
-//			ProfessorDTO dto = new ProfessorDTO();
-//			dto.setId(professorEntity.getId());
-//			dto.setNome(professorEntity.getNome());
-//			//dto.setCpf(professorEntity.getCpf());
-//			dto.setRua(professorEntity.getRua());
-//			dto.setNumero(professorEntity.getNumero());
-//			dto.setCep(professorEntity.getCep());
-//			
-//			listaDTO.add(dto);
+
 			listaDTO.add(professorEntity.toDTO());
 		}
 		
@@ -57,11 +36,7 @@ public class ProfessorService {
 		
 	}
 	
-//	public ProfessorEntity getOne(int id, ArrayList<ProfessorEntity> listaProfessor) {
-//		
-//		int indice = findIndex(id, listaProfessor);
-//		return (indice >= 0 ? listaProfessor.get(indice) : null);
-//	}
+
 	
 	public ProfessorDTO getOne(int id) {
 		Optional<ProfessorEntity> optional = professorRepository.findById(id);
@@ -73,45 +48,14 @@ public class ProfessorService {
 		return professorRepository.save(professor).toDTO();		
 	}
 	
-//	public int findIndex(int id, ArrayList<ProfessorEntity> listaProfessor) {
-//		
-//		for (int i = 0; i < listaProfessor.size(); i++) {
-//			if (listaProfessor.get(i).getId() == id) {
-//				return i;
-//			}
-//		}
-//		
-//		return -1;
-//	}
-	
-//	 // variável professor contém os dados vindo da requisição  REST
-//		public ProfessorEntity update(int id, ProfessorEntity professor, 
-//					ArrayList<ProfessorEntity> listaProfessor ) {
-//			
-//			int indice = findIndex(id, listaProfessor);
-//			
-//			if (indice >= 0) {
-//				
-//				listaProfessor.get(indice).setNome( professor.getNome() );
-//				listaProfessor.get(indice).setCpf( professor.getCpf() );
-//				listaProfessor.get(indice).setRua( professor.getRua() );
-//				listaProfessor.get(indice).setNumero( professor.getNumero() );
-//				listaProfessor.get(indice).setCep( professor.getCep() );
-//				
-//				return listaProfessor.get(indice);
-//			}
-//			
-//			return null;
-//		}
-//	
-	 // variável professor contém os dados vindo da requisição  REST
 	
 	public ProfessorDTO update(int id, ProfessorEntity professor) {
-		// 1º passo: verificar se o registro existe no banco de dados
+
+		// 1º PASSO: VERIFICAR SE O REGISTRO EXISTE NO BANCO DE DADOS
 		Optional<ProfessorEntity> optional = professorRepository.findById(id);
-		// se existe no banco
+		// SE EXISTE NO BANCO
 		if(optional.isPresent() == true) {
-			// atualiza o objeto existente
+			// ATUALIZA O OBJETO EXISTENTE
 			ProfessorEntity professorBD = optional.get();
 			professorBD.setNome(professor.getNome());
 			professorBD.setCep(professor.getCep());
@@ -121,18 +65,12 @@ public class ProfessorService {
 			
 			return professorRepository.save(professorBD).toDTO();
 		}
-		// caso contrário, retorna um objeto vazio
+		// CASO CONTRÁRIO, RETORNA UM OBJETO VAZIO
 		else {
 			return new ProfessorEntity().toDTO();
 		}
 	}
 	
-//	public void delete(int id, ArrayList<ProfessorEntity> listaProfessor) {
-//		
-//		int indice = findIndex(id, listaProfessor);
-//		
-//		if (indice >= 0) listaProfessor.remove(indice);
-//	}
 	
 	public void delete(int id) {
 		
@@ -142,11 +80,7 @@ public class ProfessorService {
 	
 	
 public List<ProfessorDTO> searchByName(String nome){
-		
-	   //List<ProfessorEntity> lista =  professorRepository.findByNomeContains(name); //JPA
-	   //List<ProfessorEntity> lista =  professorRepository.searchByNome(name); //JPQL
 		List<ProfessorEntity> lista =  professorRepository.searchByNomeNativeSQL(nome);// SQL NATIVO
-	
 		
 		List<ProfessorDTO> dtos = new ArrayList<>();
 		
